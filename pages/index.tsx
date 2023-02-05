@@ -1,4 +1,6 @@
-import Pricing from 'components/Pricing';
+import { useEffect } from 'react';
+import Pricing from 'src/Pricing';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { getActiveProductsWithPrices } from 'utils/supabase-client';
 import { Product } from 'types';
 import { GetStaticPropsResult } from 'next';
@@ -7,17 +9,23 @@ interface Props {
   products: Product[];
 }
 
-export default function PricingPage({ products }: Props) {
-  return <Pricing products={products} />;
+export default function Audience() {
+  const supabaseClient = useSupabaseClient();
+
+  return <div>hi</div>;
 }
 
-export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-  const products = await getActiveProductsWithPrices();
+// export default function PricingPage({ products }: Props) {
+//   return <Pricing products={products} />;
+// }
 
-  return {
-    props: {
-      products
-    },
-    revalidate: 60
-  };
-}
+// export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
+//   const products = await getActiveProductsWithPrices();
+
+//   return {
+//     props: {
+//       products
+//     },
+//     revalidate: 60
+//   };
+// }

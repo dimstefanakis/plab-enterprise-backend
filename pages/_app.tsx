@@ -2,8 +2,9 @@ import 'styles/main.css';
 import 'styles/chrome-bug.css';
 import { useEffect, useState } from 'react';
 import React from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
 
-import Layout from 'components/Layout';
+import Layout from '@/components/flat/Layout';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { AppProps } from 'next/app';
@@ -19,7 +20,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <div className="bg-black">
+    <ChakraProvider>
       <SessionContextProvider supabaseClient={supabaseClient}>
         <MyUserContextProvider>
           <Layout>
@@ -27,6 +28,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           </Layout>
         </MyUserContextProvider>
       </SessionContextProvider>
-    </div>
+    </ChakraProvider>
   );
 }

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
-import LoadingDots from 'components/ui/LoadingDots';
-import Logo from 'components/icons/Logo';
+import LoadingDots from '@/components/flat/LoadingDots';
+import Logo from 'src/icons/Logo';
 import { getURL } from '@/utils/helpers';
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
 
@@ -27,7 +27,7 @@ const SignIn = () => {
           <div className="flex flex-col space-y-4">
             <Auth
               supabaseClient={supabaseClient}
-              providers={['github']}
+              providers={['google']}
               redirectTo={getURL()}
               magicLink={true}
               appearance={{
