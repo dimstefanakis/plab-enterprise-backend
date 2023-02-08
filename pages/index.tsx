@@ -3,6 +3,7 @@ import Pricing from 'src/Pricing';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { getActiveProductsWithPrices } from 'utils/supabase-client';
 import { Product } from 'types';
+import AudienceCard from '@/components/flat/AudienceCard';
 import { GetStaticPropsResult } from 'next';
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
 export default function Audience() {
   const supabaseClient = useSupabaseClient();
 
-  return <div>hi</div>;
+  return <AudienceCard />;
 }
 
 // export default function PricingPage({ products }: Props) {
