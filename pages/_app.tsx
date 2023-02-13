@@ -10,6 +10,7 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { AppProps } from 'next/app';
 import { MyUserContextProvider } from 'utils/useUser';
+import useBuilderStore from '@/components/store/builderStore';
 import type { Database } from 'types_db';
 
 const theme = extendTheme({
@@ -29,8 +30,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const [supabaseClient] = useState(() =>
     createBrowserSupabaseClient<Database>()
   );
+  const data = useBuilderStore((state) => state.data);
+  const setData = useBuilderStore((state) => state.setData);
+
   useEffect(() => {
     document.body.classList?.remove('loading');
+  }, []);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem('survey');
+    if (savedData) {
+      setData(JSON.parse(savedData));
+    }
   }, []);
 
   return (

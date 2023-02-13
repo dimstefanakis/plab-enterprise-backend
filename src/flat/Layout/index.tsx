@@ -46,7 +46,7 @@ export default function Layout({ children, meta: pageMeta }: Props) {
       {/* <Navbar /> */}
       <main id="skip">
         <Flex w="100%" justifyContent="center">
-          <Flex w="100%" maxW="800px" mt={10}>{children}</Flex>
+          <Flex w="100%" maxW="1000px" mt={10}>{children}</Flex>
         </Flex>
       </main>
       {/* <Footer /> */}

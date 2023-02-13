@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Flex, Text, Input, Box, HStack, Button } from '@chakra-ui/react';
 import QuestionNumber from '@/components/flat/QuestionNumber';
 import QuestionTypeSelector from '@/components/flat/QuestionTypeSelector';
@@ -7,6 +8,7 @@ import AddQuestion from '@/components/flat/AddQuestion';
 import useBuilderStore from '@/components/store/builderStore';
 
 function Builder() {
+  const router = useRouter();
   const currentPageNumber = useBuilderStore((state) => state.currentPage);
   const currentPage = useBuilderStore(
     (state) => state.data.pages[currentPageNumber]
@@ -44,8 +46,12 @@ function Builder() {
     setCurrentPage(data.pages.length - 1);
   }, [data.pages.length]);
 
+  function handleNextClick() {
+    router.push('/survey_name');
+  }
+
   return (
-    <Flex flexFlow="column" w="100%">
+    <Flex flexFlow="column" w="100%" ml="100px">
       <QuestionMap />
       <QuestionNumber />
       <Input
@@ -58,7 +64,9 @@ function Builder() {
       </Box>
       <HStack mt={10}>
         <AddQuestion />
-        <Button colorScheme="blue" w="100%">Next Step</Button>
+        <Button colorScheme="blue" w="100%" onClick={handleNextClick}>
+          Next Step
+        </Button>
       </HStack>
     </Flex>
   );

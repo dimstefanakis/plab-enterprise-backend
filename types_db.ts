@@ -9,6 +9,29 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      audiences: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id: string
+          image_url?: string | null
+          name?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string | null
+        }
+      }
       customers: {
         Row: {
           id: string
@@ -33,6 +56,7 @@ export interface Database {
           interval_count: number | null
           metadata: Json | null
           product_id: string | null
+          test: string | null
           trial_period_days: number | null
           type: Database["public"]["Enums"]["pricing_type"] | null
           unit_amount: number | null
@@ -46,6 +70,7 @@ export interface Database {
           interval_count?: number | null
           metadata?: Json | null
           product_id?: string | null
+          test?: string | null
           trial_period_days?: number | null
           type?: Database["public"]["Enums"]["pricing_type"] | null
           unit_amount?: number | null
@@ -59,6 +84,7 @@ export interface Database {
           interval_count?: number | null
           metadata?: Json | null
           product_id?: string | null
+          test?: string | null
           trial_period_days?: number | null
           type?: Database["public"]["Enums"]["pricing_type"] | null
           unit_amount?: number | null
@@ -183,6 +209,7 @@ export interface Database {
           reward: number | null
           reward_text: string | null
           status: string | null
+          user: string | null
         }
         Insert: {
           audience_description?: string | null
@@ -197,6 +224,7 @@ export interface Database {
           reward?: number | null
           reward_text?: string | null
           status?: string | null
+          user?: string | null
         }
         Update: {
           audience_description?: string | null
@@ -211,6 +239,7 @@ export interface Database {
           reward?: number | null
           reward_text?: string | null
           status?: string | null
+          user?: string | null
         }
       }
       users: {

@@ -4,6 +4,7 @@ import { toDateTime } from './helpers';
 import { Customer, UserDetails, Price, Product } from 'types';
 import type { Database } from 'types_db';
 import Stripe from 'stripe';
+import { v4 as uuidv4 } from 'uuid';
 
 // Note: supabaseAdmin uses the SERVICE_ROLE_KEY which you must only use in a secure server-side context
 // as it has admin priviliges and overwrites RLS policies!
@@ -175,9 +176,48 @@ const manageSubscriptionStatusChange = async (
     );
 };
 
+const createSurveyRecord = async (
+  survey: any,
+  user: Database['public']['Tables']['users']['Row']
+) => {
+  const user_id = user.id;
+  const surveyData: Database['public']['Tables']['surveys']['Insert'] = {
+    id: uuidv4(),
+    user: user_id,
+    data: survey,
+    name: survey.surveyName,
+    responses_needed: survey.responsesNeeded
+  };
+  const { data, error } = await supabaseAdmin
+    .from('surveys')
+    .insert([surveyData]);
+  if (error) throw error;
+  console.log(`Survey inserted for user [${user_id}].`);
+  return data;
+};
+
+const getUserProfile = async (user_id: string) => {
+  const { data, error } = await supabaseAdmin
+    .from('users')
+    .select('*')
+    .eq('id', user_id)
+    .single();
+  if (error) throw error;
+  return data;
+};
+
+const retrieveAudiences = async () => {
+  const { data, error } = await supabaseAdmin.from('audiences').select('*');
+  if (error) throw error;
+  return data;
+};
+
 export {
   upsertProductRecord,
   upsertPriceRecord,
   createOrRetrieveCustomer,
-  manageSubscriptionStatusChange
+  manageSubscriptionStatusChange,
+  createSurveyRecord,
+  getUserProfile,
+  retrieveAudiences
 };
