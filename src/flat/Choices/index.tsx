@@ -1,9 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Flex, Box, Text, Input, Button, Stack } from '@chakra-ui/react';
+import { useState, useEffect, useRef } from 'react';
+import {
+  Flex,
+  Box,
+  Text,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Button,
+  IconButton,
+  Stack
+} from '@chakra-ui/react';
+import { VscTrash } from 'react-icons/vsc';
 import useBuilderStore from '@/components/store/builderStore';
 import { v4 as uuidv4 } from 'uuid';
 
-interface Choice {
+interface IChoice {
   text: string;
   value: string;
   id?: string;
@@ -17,8 +28,14 @@ function Choices() {
   const data = useBuilderStore((state) => state.data);
   const setData = useBuilderStore((state) => state.setData);
 
-  const [choices, setChoices] = useState<Choice[]>(
-    currentPage.elements[0]?.choices || []
+  const [choices, setChoices] = useState<IChoice[]>(
+    currentPage.elements[0]?.choices || [
+      {
+        text: '',
+        value: '',
+        id: uuidv4()
+      }
+    ]
   );
 
   function handleChoiceChange(
@@ -26,7 +43,7 @@ function Choices() {
     id: string | undefined
   ) {
     const { value } = e.target;
-    const updatedChoices = choices.map((choice: Choice) => {
+    const updatedChoices = choices.map((choice: IChoice) => {
       if (choice.id === id) {
         return {
           text: value,
@@ -35,6 +52,13 @@ function Choices() {
         };
       }
       return choice;
+    });
+    setChoices(updatedChoices);
+  }
+
+  function handleDeleteChoice(id: string | undefined) {
+    const updatedChoices = choices.filter((choice: IChoice) => {
+      return choice.id !== id;
     });
     setChoices(updatedChoices);
   }
@@ -59,7 +83,7 @@ function Choices() {
           elements: [
             {
               ...page.elements[0],
-              choices: choices.map((choice: Choice) => ({
+              choices: choices.map((choice: IChoice) => ({
                 value: choice.value,
                 text: choice.text,
                 id: choice.id
@@ -78,7 +102,15 @@ function Choices() {
 
   // This useEffect is to update the choices state when the currentPageNumber changes
   useEffect(() => {
-    setChoices(currentPage.elements[0]?.choices || []);
+    setChoices(
+      currentPage.elements[0]?.choices || [
+        {
+          text: '',
+          value: '',
+          id: uuidv4()
+        }
+      ]
+    );
   }, [currentPageNumber]);
 
   return currentPage.elements[0]?.type === 'checkbox' ||
@@ -89,19 +121,60 @@ function Choices() {
       </Text>
       <Stack>
         {currentPage.elements[0]?.choices?.map(
-          (choice: Choice, index: number) => (
-            <Input
+          (choice: IChoice, index: number) => (
+            <Choice
               key={index}
-              placeholder="Choice"
-              value={choice.value}
-              onChange={(e) => handleChoiceChange(e, choice?.id)}
-            ></Input>
+              choice={choice}
+              onChange={handleChoiceChange}
+              onDelete={handleDeleteChoice}
+            ></Choice>
           )
         )}
         <Button onClick={handleAddChoice}>Add Choice</Button>
       </Stack>
     </Flex>
   ) : null;
+}
+
+function Choice({
+  choice,
+  onChange,
+  onDelete
+}: {
+  choice: IChoice;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string | undefined
+  ) => void;
+  onDelete: (id: string | undefined) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  return (
+    <InputGroup>
+      <Input
+        ref={inputRef}
+        placeholder="Choice"
+        value={choice.value}
+        onChange={(e) => onChange(e, choice?.id)}
+      ></Input>
+      <InputRightElement width="4.5rem">
+        <IconButton
+          h="1.75rem"
+          size="sm"
+          aria-label="Delete"
+          icon={<VscTrash />}
+          onClick={() => onDelete(choice?.id)}
+        ></IconButton>
+      </InputRightElement>
+    </InputGroup>
+  );
 }
 
 export default Choices;

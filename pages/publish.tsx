@@ -52,10 +52,6 @@ function PublishSurvey() {
   }
 
   useEffect(() => {
-    localStorage.setItem('survey', JSON.stringify(data));
-  }, [data]);
-
-  useEffect(() => {
     if (authStatus === 'success') {
       publish();
     }

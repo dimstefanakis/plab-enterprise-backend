@@ -13,9 +13,20 @@ interface BuilderState {
     audience: Database['public']['Tables']['audiences']['Row']
   ) => void;
   addPage: () => void;
+  deletePage: (pageId: string) => void;
+  reorderPageUp: (pageId: string) => void;
+  reorderPageDown: (pageId: string) => void;
 }
 
-const savedData = localStorage.getItem('survey');
+function getSavedData() {
+  try {
+    return localStorage.getItem('surveyData');
+  } catch (e) {
+    return null;
+  }
+}
+let savedData = getSavedData();
+
 const initialSurveyData = savedData
   ? JSON.parse(savedData)
   : {
@@ -50,7 +61,6 @@ const useBuilderStore = create<BuilderState>((set) => ({
         responsesNeeded
       }
     })),
-
   setAudience: (audience: Database['public']['Tables']['audiences']['Row']) =>
     set((state) => ({
       data: {
@@ -71,7 +81,44 @@ const useBuilderStore = create<BuilderState>((set) => ({
           }
         ]
       }
-    }))
+    })),
+  deletePage: (pageId: string) =>
+    set((state) => ({
+      data: {
+        ...state.data,
+        pages: state.data.pages.filter((page: any) => page.id !== pageId)
+      }
+    })),
+  reorderPageUp: (pageId: string) =>
+    set((state) => {
+      const pages = [...state.data.pages];
+      const index = pages.findIndex((page) => page.id === pageId);
+      if (index === 0) return state;
+      const page = pages[index];
+      pages[index] = pages[index - 1];
+      pages[index - 1] = page;
+      return {
+        data: {
+          ...state.data,
+          pages
+        }
+      };
+    }),
+  reorderPageDown: (pageId: string) =>
+    set((state) => {
+      const pages = [...state.data.pages];
+      const index = pages.findIndex((page) => page.id === pageId);
+      if (index === pages.length - 1) return state;
+      const page = pages[index];
+      pages[index] = pages[index + 1];
+      pages[index + 1] = page;
+      return {
+        data: {
+          ...state.data,
+          pages
+        }
+      };
+    })
 }));
 
 export default useBuilderStore;

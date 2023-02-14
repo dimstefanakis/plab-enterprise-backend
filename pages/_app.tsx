@@ -11,6 +11,7 @@ import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { AppProps } from 'next/app';
 import { MyUserContextProvider } from 'utils/useUser';
 import useBuilderStore from '@/components/store/builderStore';
+import useAutoSave from '@/components/hooks/useAutoSave';
 import type { Database } from 'types_db';
 
 const theme = extendTheme({
@@ -27,6 +28,7 @@ const theme = extendTheme({
 });
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  useAutoSave();
   const [supabaseClient] = useState(() =>
     createBrowserSupabaseClient<Database>()
   );
