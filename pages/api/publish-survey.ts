@@ -15,11 +15,15 @@ export default withApiAuth(async function publishSurvey(
       const profile = await getUserProfile(user.user?.id || '');
 
       console.log(req.body.survey);
-      try {
-        const data = await createSurveyRecord(req.body.survey, profile);
-        return res.status(200).json({ data });
-      } catch (err: any) {
-        throw Error(err.message);
+      if (profile) {
+        try {
+          const data = await createSurveyRecord(req.body.survey, profile);
+          return res.status(200).json({ data });
+        } catch (err: any) {
+          throw Error(err.message);
+        }
+      } else {
+        throw Error('Could not get user profile');
       }
     } catch (err: any) {
       console.log(err);
