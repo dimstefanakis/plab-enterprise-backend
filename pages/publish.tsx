@@ -37,6 +37,7 @@ function PublishSurvey() {
           duration: 5000,
           isClosable: true
         });
+        localStorage.removeItem('survey');
       }
       console.log(json);
     } catch (err) {
