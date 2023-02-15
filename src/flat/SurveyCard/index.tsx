@@ -50,7 +50,7 @@ function SurveyCard() {
       >
         {data.responsesNeeded} responses needed
       </Text>
-      <Button colorScheme="blue" onClick={onEdit}>
+      <Button variant="solid" colorScheme="black" onClick={onEdit}>
         Edit
       </Button>
     </Flex>

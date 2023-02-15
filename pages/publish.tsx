@@ -70,9 +70,11 @@ function PublishSurvey() {
         Audience
       </Text>
       <HStack>
-        <AudienceCard audience={data.audience} />
+        <AudienceCard audience={data.audience} isEditing />
         <SurveyCard />
-        <Button onClick={publish}>Publish</Button>
+        <Button h="100%" w="xs" onClick={publish}>
+          Publish
+        </Button>
       </HStack>
     </Flex>
   );
