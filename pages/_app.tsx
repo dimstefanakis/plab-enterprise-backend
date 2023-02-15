@@ -6,7 +6,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { extendTheme } from '@chakra-ui/react';
 
 import Layout from '@/components/flat/Layout';
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { SessionContextProvider, Session } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { AppProps } from 'next/app';
 import { MyUserContextProvider } from 'utils/useUser';
@@ -27,7 +27,12 @@ const theme = extendTheme({
   }
 });
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({
+  Component,
+  pageProps
+}: AppProps<{
+  initialSession: Session;
+}>) {
   useAutoSave();
   const [supabaseClient] = useState(() =>
     createBrowserSupabaseClient<Database>()
@@ -48,7 +53,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider theme={theme}>
-      <SessionContextProvider supabaseClient={supabaseClient}>
+      <SessionContextProvider
+        supabaseClient={supabaseClient}
+        initialSession={pageProps.initialSession}
+      >
         <MyUserContextProvider>
           <Layout>
             <Component {...pageProps} />

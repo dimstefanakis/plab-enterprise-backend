@@ -14,7 +14,7 @@ function PublishSurvey() {
   const user = useUser();
 
   async function publish() {
-    if (!user) {
+    if (!user && !authStatus) {
       router.push('/signin');
     }
     const surveyData = JSON.parse(localStorage.getItem('survey') || '{}');
@@ -55,7 +55,7 @@ function PublishSurvey() {
     if (authStatus === 'success') {
       publish();
     }
-  }, [authStatus]);
+  }, [authStatus, user]);
 
   return (
     <Flex flexFlow="column" w="100%">
@@ -71,7 +71,6 @@ function PublishSurvey() {
       </Text>
       <HStack>
         {data.audience && <AudienceCard audience={data.audience} isEditing />}
-
         <SurveyCard />
         <Button h="100%" w="xs" onClick={publish}>
           Publish
