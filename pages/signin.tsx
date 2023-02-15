@@ -30,7 +30,7 @@ const SignIn = () => {
               <Auth
                 supabaseClient={supabaseClient}
                 providers={['google']}
-                redirectTo={'http://localhost:3000/publish?authStatus=success'}
+                redirectTo={'/publish?authStatus=success'}
                 magicLink={true}
                 appearance={{
                   theme: ThemeSupa,
