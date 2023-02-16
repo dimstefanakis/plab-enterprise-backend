@@ -19,6 +19,13 @@ function PublishSurvey() {
     }
     const surveyData = JSON.parse(localStorage.getItem('survey') || '{}');
     try {
+      toast({
+        title: 'Publishing Survey',
+        description: 'Your survey is being published.',
+        status: 'info',
+        duration: 5000,
+        isClosable: true
+      });
       const res = await fetch('/api/publish-survey', {
         method: 'POST',
         body: JSON.stringify({
@@ -39,7 +46,6 @@ function PublishSurvey() {
         });
         localStorage.removeItem('survey');
       }
-      console.log(json);
     } catch (err) {
       toast({
         title: 'Error',

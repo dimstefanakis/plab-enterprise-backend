@@ -83,12 +83,21 @@ const useBuilderStore = create<BuilderState>((set) => ({
       }
     })),
   deletePage: (pageId: string) =>
-    set((state) => ({
-      data: {
-        ...state.data,
-        pages: state.data.pages.filter((page: any) => page.id !== pageId)
-      }
-    })),
+    set((state) => {
+      const pages =
+        state.data.pages.length == 1
+          ? state.data.pages
+          : state.data.pages.filter((page: any) => page.id !== pageId);
+
+      const currentPage = Math.min(state.currentPage, pages.length - 1);
+      return {
+        currentPage: 0,
+        data: {
+          ...state.data,
+          pages
+        }
+      };
+    }),
   reorderPageUp: (pageId: string) =>
     set((state) => {
       const pages = [...state.data.pages];

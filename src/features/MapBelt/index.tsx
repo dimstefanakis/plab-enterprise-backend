@@ -7,24 +7,31 @@ function MapBelt({ pageId }: { pageId: string }) {
   const reorderPageUp = useBuilderStore((state) => state.reorderPageUp);
   const reorderPageDown = useBuilderStore((state) => state.reorderPageDown);
 
+  function handleClick(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    callback: () => void
+  ) {
+    e.stopPropagation();
+    callback();
+  }
+
   return (
     <HStack mt={6} w="100%">
       <IconButton
         aria-label="Order Up"
-        onClick={() => reorderPageUp(pageId)}
+        onClick={(e) => handleClick(e, () => reorderPageUp(pageId))}
         icon={<VscArrowUp />}
       ></IconButton>
       <IconButton
         aria-label="Order Down"
-        onClick={() => reorderPageDown(pageId)}
+        onClick={(e) => handleClick(e, () => reorderPageDown(pageId))}
         icon={<VscArrowDown />}
       ></IconButton>
       <IconButton
         aria-label="Delete"
-        onClick={() => deletePage(pageId)}
+        onClick={(e) => handleClick(e, () => deletePage(pageId))}
         icon={<VscTrash />}
-      >
-      </IconButton>
+      ></IconButton>
     </HStack>
   );
 }

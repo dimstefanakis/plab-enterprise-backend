@@ -13,7 +13,7 @@ function Builder() {
   const currentPage = useBuilderStore(
     (state) => state.data.pages[currentPageNumber]
   );
-  const setCurrentPage = useBuilderStore((state) => state.setCurrentPage);
+  // const setCurrentPage = useBuilderStore((state) => state.setCurrentPage);
   const data = useBuilderStore((state) => state.data);
   const setData = useBuilderStore((state) => state.setData);
 
@@ -42,9 +42,9 @@ function Builder() {
     });
   }
 
-  useEffect(() => {
-    setCurrentPage(data.pages.length - 1);
-  }, [data.pages.length]);
+  // useEffect(() => {
+  //   setCurrentPage(data.pages.length - 1);
+  // }, [data.pages.length]);
 
   function handleNextClick() {
     router.push('/survey_name');
