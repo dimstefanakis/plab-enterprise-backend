@@ -100,23 +100,22 @@ function Builder() {
   }
 
   return (
-    <Flex flexFlow="column" w="100%" ml="100px">
+    <Flex flexFlow="column" w="100%">
       <QuestionMap />
       <QuestionNumber />
       <Input
-        placeholder="Question Name"
+        placeholder="Enter a question"
         value={currentPage.name}
         onChange={handleNameChange}
       ></Input>
       <Box w="100%" mt={6}>
         <QuestionTypeSelector />
       </Box>
-      <HStack mt={10}>
-        <AddQuestion />
-        <Button colorScheme="blue" w="100%" onClick={handleNextClick}>
+      <Flex mt={10} justify="center">
+        <Button colorScheme="blue" w="50%" onClick={handleNextClick}>
           Next Step
         </Button>
-      </HStack>
+      </Flex>
     </Flex>
   );
 }

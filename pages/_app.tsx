@@ -46,7 +46,7 @@ export default function MyApp({
 
   useEffect(() => {
     const savedData = localStorage.getItem('survey');
-    if (savedData) {
+    if (savedData && savedData !== 'undefined') {
       setData(JSON.parse(savedData));
     }
   }, []);

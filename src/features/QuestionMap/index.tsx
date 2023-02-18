@@ -1,4 +1,5 @@
 import { Flex, Box, Text, Stack } from '@chakra-ui/react';
+import AddQuestion from '@/components/flat/AddQuestion';
 import MapBelt from '../MapBelt';
 import useBuilderStore from '@/components/store/builderStore';
 
@@ -60,16 +61,18 @@ function QuestionMap() {
               >
                 <Flex flexFlow="column">
                   <Text fontSize="lg" fontWeight="bold" mb={2}>
-                    {page.name}
+                    Q{index + 1}
+                    {/* {page.name} */}
                   </Text>
                   <Text fontSize="sm" color="gray.500">
-                    {page.elements[0]?.type}
+                    {page.name}
                   </Text>
                   <MapBelt pageId={page.id} />
                 </Flex>
               </Box>
             );
           })}
+          <AddQuestion />
         </Stack>
       </Box>
     </Flex>

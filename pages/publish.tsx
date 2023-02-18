@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
-import { Flex, Text, Box, Button, HStack, useToast } from '@chakra-ui/react';
+import { Flex, Text, Box, Button, HStack, Heading, useToast } from '@chakra-ui/react';
 import AudienceCard from '@/components/flat/AudienceCard';
 import SurveyCard from '@/components/flat/SurveyCard';
 import useBuilderStore from '@/components/store/builderStore';
+import useHeaderStore from '@/components/store/headerStore';
 
 function PublishSurvey() {
   const router = useRouter();
   const { authStatus } = router.query;
   const toast = useToast();
   const data = useBuilderStore((state) => state.data);
+  const title = useHeaderStore((state) => state.title);
+  const setTitle = useHeaderStore((state) => state.setTitle);
   const user = useUser();
 
   async function publish() {
@@ -64,22 +67,19 @@ function PublishSurvey() {
     }
   }, [authStatus, user]);
 
+  useEffect(() => {
+    setTitle('Publish Survey');
+  }, []);
+
   return (
     <Flex flexFlow="column" w="100%">
-      <Text
-        fontSize="sm"
-        fontWeight="bold"
-        color="gray.500"
-        textTransform="uppercase"
-        letterSpacing="wide"
-        mb={2}
-      >
-        Audience
-      </Text>
+      <Heading size="md" color="gray.600" mb={10}>
+        {title}
+      </Heading>
       <HStack>
         {data.audience && <AudienceCard audience={data.audience} isEditing />}
         <SurveyCard />
-        <Button h="100%" w="xs" onClick={publish}>
+        <Button h="100%" colorScheme="blue" w="xs" onClick={publish}>
           Publish
         </Button>
       </HStack>

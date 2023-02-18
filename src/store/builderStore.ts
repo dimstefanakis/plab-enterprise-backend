@@ -76,7 +76,7 @@ const initialSurveyData = savedData
   : {
       surveyName: '',
       audience: <Database['public']['Tables']['audiences']['Row'] | null>null,
-      responsesNeeded: 0,
+      responsesNeeded: 100,
       pages: [
         {
           name: '',
@@ -141,6 +141,7 @@ const useBuilderStore = create<BuilderState>((set) => ({
     })),
   addPage: () =>
     set((state) => ({
+      currentPage: state.data.pages.length,
       data: {
         ...state.data,
         pages: [

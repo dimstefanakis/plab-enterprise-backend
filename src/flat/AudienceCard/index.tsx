@@ -33,7 +33,7 @@ function AudienceCard({
   }
 
   return (
-    <Card maxW="xs" variant="elevated" mx={isEditing ? 0 : 4}>
+    <Card maxW="xs" variant="elevated" mr={isEditing ? 0 : 4}>
       <CardBody p={0}>
         <Image
           src={audience.image_url || ''}
@@ -43,9 +43,7 @@ function AudienceCard({
         />
         <Stack mt="6" spacing="3" p={4}>
           <Heading size="md">{audience.name}</Heading>
-          <Text>
-            {audience.description}
-          </Text>
+          <Text>{audience.description}</Text>
         </Stack>
       </CardBody>
       <CardFooter>
@@ -56,7 +54,7 @@ function AudienceCard({
             w="100%"
             onClick={onAudienceSelect}
           >
-            Select
+            {isEditing ? 'Edit' : 'Select'}
           </Button>
         </Flex>
       </CardFooter>

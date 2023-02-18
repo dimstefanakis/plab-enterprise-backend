@@ -15,7 +15,7 @@ function Audiences() {
   }, []);
 
   return (
-    <Flex flexFlow="row wrap" w="100%" justifyContent="center">
+    <Flex flexFlow="row wrap" w="100%">
       {audiences.map((audience) => (
         <AudienceCard key={audience.id} audience={audience} />
       ))}

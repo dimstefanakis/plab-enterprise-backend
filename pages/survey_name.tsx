@@ -1,12 +1,16 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Flex, Text, Link, Input, useToast } from '@chakra-ui/react';
+import { Button, Flex, Text, Link, Input, Heading, useToast } from '@chakra-ui/react';
 import useBuilderStore from '@/components/store/builderStore';
+import useHeaderStore from '@/components/store/headerStore';
 
 function SurveyName() {
   const toast = useToast();
   const router = useRouter();
   const surveyName = useBuilderStore((state) => state.data.surveyName);
   const setSurveyName = useBuilderStore((state) => state.setName);
+  const title = useHeaderStore((state) => state.title);
+  const setTitle = useHeaderStore((state) => state.setTitle);
 
   const responsesNeeded = useBuilderStore(
     (state) => state.data.responsesNeeded
@@ -39,18 +43,15 @@ function SurveyName() {
     router.push('/publish');
   }
 
+  useEffect(() => {
+    setTitle('What is your survey name?');
+  }, []);
+
   return (
     <Flex flexFlow="column" w="100%">
-      <Text
-        fontSize="sm"
-        fontWeight="bold"
-        color="gray.500"
-        textTransform="uppercase"
-        letterSpacing="wide"
-        mb={2}
-      >
-        Give your survey a name to publish it
-      </Text>
+      <Heading size="md" color="gray.600" mb={10}>
+        {title}
+      </Heading>
       <Input
         placeholder="Enter survey name"
         value={surveyName}
@@ -60,12 +61,11 @@ function SurveyName() {
         fontSize="sm"
         fontWeight="bold"
         color="gray.500"
-        textTransform="uppercase"
         letterSpacing="wide"
         mb={2}
         mt={10}
       >
-        Responses needed
+        How many responses do you need?
       </Text>
       <Input
         placeholder="100"

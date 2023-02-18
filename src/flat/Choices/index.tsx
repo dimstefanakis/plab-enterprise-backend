@@ -160,7 +160,7 @@ function Choice({
     <InputGroup>
       <Input
         ref={inputRef}
-        placeholder="Choice"
+        placeholder="Enter a choice"
         value={choice.value}
         onChange={(e) => onChange(e, choice?.id)}
       ></Input>
