@@ -4,6 +4,7 @@ import useBuilderStore from '@/components/store/builderStore';
 
 function QuestionMap() {
   const data = useBuilderStore((state) => state.data);
+  const errors = useBuilderStore((state) => state.errors);
   const currentPageNumber = useBuilderStore((state) => state.currentPage);
 
   function onClickQuestion(id: string) {
@@ -33,34 +34,42 @@ function QuestionMap() {
           Question Map
         </Text>
         <Stack spacing={2}>
-          {data.pages.map((page: any, index: number) => (
-            <Box
-              key={index}
-              onClick={() => onClickQuestion(page.id)}
-              cursor="pointer"
-              p={4}
-              borderRadius="lg"
-              border="1px solid"
-              borderColor="gray.200"
-              backgroundColor={
-                currentPageNumber === index ? 'gray.100' : 'white'
-              }
-              w="100%"
-              _hover={{
-                borderColor: 'gray.300'
-              }}
-            >
-              <Flex flexFlow="column">
-                <Text fontSize="lg" fontWeight="bold" mb={2}>
-                  {page.name}
-                </Text>
-                <Text fontSize="sm" color="gray.500">
-                  {page.elements[0]?.type}
-                </Text>
-                <MapBelt pageId={page.id} />
-              </Flex>
-            </Box>
-          ))}
+          {data.pages.map((page: any, index: number) => {
+            const hasError = Object.keys(errors).includes(page.id);
+            let backgroundColor = 'white';
+            backgroundColor = hasError
+              ? 'red.100'
+              : currentPageNumber === index
+              ? 'gray.100'
+              : 'white';
+
+            return (
+              <Box
+                key={index}
+                onClick={() => onClickQuestion(page.id)}
+                cursor="pointer"
+                p={4}
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="gray.200"
+                backgroundColor={backgroundColor}
+                w="100%"
+                _hover={{
+                  borderColor: 'gray.300'
+                }}
+              >
+                <Flex flexFlow="column">
+                  <Text fontSize="lg" fontWeight="bold" mb={2}>
+                    {page.name}
+                  </Text>
+                  <Text fontSize="sm" color="gray.500">
+                    {page.elements[0]?.type}
+                  </Text>
+                  <MapBelt pageId={page.id} />
+                </Flex>
+              </Box>
+            );
+          })}
         </Stack>
       </Box>
     </Flex>

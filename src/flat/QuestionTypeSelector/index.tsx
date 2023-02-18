@@ -3,6 +3,7 @@ import { Flex, Box, Text } from '@chakra-ui/react';
 import QuestionTypeSelectorItem from '../QuestionTypeSelectorItem';
 import Choices from '../Choices';
 import useBuilderStore from '@/components/store/builderStore';
+import { v4 as uuidv4 } from 'uuid';
 
 function QuestionTypeSelector() {
   const [questionType, setQuestionType] = useState('checkbox');
@@ -20,11 +21,26 @@ function QuestionTypeSelector() {
   useEffect(() => {
     const updatedPages = data.pages.map((page: any, index: number) => {
       if (page.id === currentPage.id) {
+        let updatedElements = { ...page.elements[0] };
+        if (questionType == 'text' || questionType == 'number') {
+          delete updatedElements.choices;
+        } else {
+          if(!updatedElements.choices){
+            updatedElements.choices = [
+              {
+                text: '',
+                value: '',
+                id: uuidv4()
+              }
+            ];
+          }
+        }
+
         return {
           ...page,
           elements: [
             {
-              ...page.elements[0],
+              ...updatedElements,
               type: questionType
             }
           ]

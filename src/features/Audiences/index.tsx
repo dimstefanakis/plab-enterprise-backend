@@ -14,8 +14,6 @@ function Audiences() {
       .then((data) => setAudiences(data));
   }, []);
 
-  console.log(audiences);
-
   return (
     <Flex flexFlow="row wrap" w="100%" justifyContent="center">
       {audiences.map((audience) => (

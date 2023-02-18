@@ -1,13 +1,23 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Flex, Text, Input, Box, HStack, Button } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Input,
+  Box,
+  HStack,
+  Button,
+  useToast
+} from '@chakra-ui/react';
 import QuestionNumber from '@/components/flat/QuestionNumber';
 import QuestionTypeSelector from '@/components/flat/QuestionTypeSelector';
 import QuestionMap from '../QuestionMap';
 import AddQuestion from '@/components/flat/AddQuestion';
+import usePageErrors from '@/components/hooks/usePageErrors';
 import useBuilderStore from '@/components/store/builderStore';
 
 function Builder() {
+  const toast = useToast();
   const router = useRouter();
   const currentPageNumber = useBuilderStore((state) => state.currentPage);
   const currentPage = useBuilderStore(
@@ -16,8 +26,11 @@ function Builder() {
   // const setCurrentPage = useBuilderStore((state) => state.setCurrentPage);
   const data = useBuilderStore((state) => state.data);
   const setData = useBuilderStore((state) => state.setData);
+  const errors = useBuilderStore((state) => state.errors);
+  const pageErrors = errors[currentPage.id];
 
-  console.log(data, 'Data');
+  usePageErrors(currentPage.id);
+
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
     const updatedPages = data.pages.map((page: any, index: number) => {
@@ -47,7 +60,43 @@ function Builder() {
   // }, [data.pages.length]);
 
   function handleNextClick() {
-    router.push('/survey_name');
+    if (pageErrors && pageErrors.length > 0) {
+      if (toast.isActive(`${currentPage.id}-errors`)) {
+        toast.update(`${currentPage.id}-errors`, {
+          title: 'Please fix the following errors:',
+          description: pageErrors.map((error: any) => error.message).join(''),
+          status: 'error',
+          position: 'top',
+          duration: 10000,
+          isClosable: false
+        });
+        return;
+      }
+      toast({
+        id: `${currentPage.id}-errors`,
+        title: 'Please fix the following errors:',
+        description: pageErrors.map((error: any) => error.message).join(''),
+        status: 'error',
+        position: 'top',
+        duration: 10000,
+        isClosable: false
+      });
+    } else {
+      toast.close(`${currentPage.id}-errors`);
+      if (Object.keys(errors).length > 0) {
+        toast({
+          id: 'global-errors',
+          title:
+            'You have errors on other pages. Please fix them before continuing.',
+          status: 'error',
+          position: 'top',
+          duration: 10000,
+          isClosable: true
+        });
+        return;
+      }
+      router.push('/survey_name');
+    }
   }
 
   return (
