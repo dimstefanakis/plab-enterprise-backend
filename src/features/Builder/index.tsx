@@ -113,7 +113,7 @@ function Builder() {
       </Box>
       <Flex mt={10} justify="center">
         <Button colorScheme="blue" w="50%" onClick={handleNextClick}>
-          Next Step
+          Save and Continue
         </Button>
       </Flex>
     </Flex>
