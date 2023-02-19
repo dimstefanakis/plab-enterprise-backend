@@ -6,19 +6,23 @@ import {
   useSession,
   useUser as useSupaUser
 } from '@supabase/auth-helpers-react';
-import { getActiveProductsWithPrices } from 'utils/supabase-client';
+import {
+  getActiveProductsWithPrices,
+  getAudiences
+} from 'utils/supabase-client';
 import { useUser } from '@/utils/useUser';
 import { Product } from 'types';
 import Audiences from '@/components/features/Audiences';
 import AudienceCard from '@/components/flat/AudienceCard';
 import useHeaderStore from '@/components/store/headerStore';
 import { GetStaticPropsResult } from 'next';
+import type { Database } from 'types_db';
 
 interface Props {
-  products: Product[];
+  audiences: Database['public']['Tables']['audiences']['Row'][];
 }
 
-export default function Audience() {
+export default function Audience({audiences}: Props) {
   const supabaseClient = useSupabaseClient();
   const user = useSupaUser();
   const title = useHeaderStore((state) => state.title);
@@ -33,22 +37,18 @@ export default function Audience() {
       <Heading color="gray.600" size="md" mb={10}>
         {title}
       </Heading>
-      <Audiences />
+      <Audiences audiences={audiences} />
     </Flex>
   );
 }
 
-// export default function PricingPage({ products }: Props) {
-//   return <Pricing products={products} />;
-// }
-
-// export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-//   const products = await getActiveProductsWithPrices();
-
-//   return {
-//     props: {
-//       products
-//     },
-//     revalidate: 60
-//   };
-// }
+export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
+  const data = await getAudiences()
+  
+  return {
+    props: {
+      audiences: data
+    },
+    revalidate: 60
+  };
+}

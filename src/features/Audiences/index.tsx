@@ -3,17 +3,11 @@ import { Flex } from '@chakra-ui/react';
 import AudienceCard from '@/components/flat/AudienceCard';
 import type { Database } from 'types_db';
 
-function Audiences() {
-  const [audiences, setAudiences] = useState<
-    Database['public']['Tables']['audiences']['Row'][] | []
-  >([]);
+interface Props {
+  audiences: Database['public']['Tables']['audiences']['Row'][];
+}
 
-  useEffect(() => {
-    fetch('/api/get-audiences')
-      .then((res) => res.json())
-      .then((data) => setAudiences(data));
-  }, []);
-
+function Audiences({ audiences }: Props) {
   return (
     <Flex flexFlow="row wrap" w="100%">
       {audiences.map((audience) => (
