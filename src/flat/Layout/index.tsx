@@ -15,9 +15,9 @@ interface Props {
 export default function Layout({ children, meta: pageMeta }: Props) {
   const router = useRouter();
   const meta = {
-    title: 'Next.js Subscription Starter',
-    description: 'Brought to you by Vercel, Stripe, and Supabase.',
-    cardImage: '/og.png',
+    title: 'Reach your audience',
+    description: 'Brought to you by ProductLab',
+    // cardImage: '/og.png',
     ...pageMeta
   };
 
