@@ -1,7 +1,15 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
-import { Flex, Text, Box, Button, HStack, Heading, useToast } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Box,
+  Button,
+  HStack,
+  Heading,
+  useToast
+} from '@chakra-ui/react';
 import AudienceCard from '@/components/flat/AudienceCard';
 import SurveyCard from '@/components/flat/SurveyCard';
 import useBuilderStore from '@/components/store/builderStore';
@@ -22,13 +30,15 @@ function PublishSurvey() {
     }
     const surveyData = JSON.parse(localStorage.getItem('survey') || '{}');
     try {
-      toast({
-        title: 'Publishing Survey',
-        description: 'Your survey is being published.',
-        status: 'info',
-        duration: 5000,
-        isClosable: true
-      });
+      if (user) {
+        toast({
+          title: 'Publishing Survey',
+          description: 'Your survey is being published.',
+          status: 'info',
+          duration: 5000,
+          isClosable: true
+        });
+      }
       const res = await fetch('/api/publish-survey', {
         method: 'POST',
         body: JSON.stringify({
