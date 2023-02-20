@@ -18,6 +18,7 @@ interface BuilderState {
   deletePage: (pageId: string) => void;
   reorderPageUp: (pageId: string) => void;
   reorderPageDown: (pageId: string) => void;
+  reset: () => void;
 }
 
 const choiceSchema = Joi.object({
@@ -199,6 +200,12 @@ const useBuilderStore = create<BuilderState>((set) => ({
           pages
         }
       };
+    }),
+  reset: () =>
+    set({
+      data: initialSurveyData,
+      errors: {},
+      currentPage: 0
     })
 }));
 

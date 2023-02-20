@@ -50,14 +50,14 @@ function PublishSurvey() {
       });
       const json = await res.json();
       if (res.status === 200) {
-        toast({
-          title: 'Survey In Review',
-          description: 'Your survey is in review and will be published soon.',
-          status: 'success',
-          duration: 5000,
-          isClosable: true
-        });
-        localStorage.removeItem('survey');
+        // toast({
+        //   title: 'Survey In Review',
+        //   description: 'Your survey is in review and will be published soon.',
+        //   status: 'success',
+        //   duration: 5000,
+        //   isClosable: true
+        // });
+        router.push('/success');
       }
     } catch (err) {
       toast({
@@ -80,6 +80,12 @@ function PublishSurvey() {
   useEffect(() => {
     setTitle('Publish Survey');
   }, []);
+
+  useEffect(() => {
+    if (data && !data.audience) {
+      router.push('/');
+    }
+  }, [data]);
 
   return (
     <Flex flexFlow="column" w="100%">
