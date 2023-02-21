@@ -8,7 +8,8 @@ import {
   InputRightElement,
   Button,
   IconButton,
-  Stack
+  Stack,
+  HStack
 } from '@chakra-ui/react';
 import { VscTrash } from 'react-icons/vsc';
 import useBuilderStore from '@/components/store/builderStore';
@@ -74,6 +75,46 @@ function Choices() {
     ]);
   }
 
+  function handleAddOtherChoice() {
+    setData({
+      ...data,
+      pages: data.pages.map((page: any, index: number) => {
+        if (page.id === currentPage.id) {
+          return {
+            ...page,
+            elements: [
+              {
+                ...page.elements[0],
+                showOtherItem: true
+              }
+            ]
+          };
+        }
+        return page;
+      })
+    });
+  }
+
+  function handleRemoveOtherChoice() {
+    setData({
+      ...data,
+      pages: data.pages.map((page: any, index: number) => {
+        if (page.id === currentPage.id) {
+          return {
+            ...page,
+            elements: [
+              {
+                ...page.elements[0],
+                showOtherItem: false
+              }
+            ]
+          };
+        }
+        return page;
+      })
+    });
+  }
+
   // This useEffect is to update the data state when the choices state changes
   useEffect(() => {
     const updatedPages = data.pages.map((page: any, index: number) => {
@@ -130,7 +171,33 @@ function Choices() {
             ></Choice>
           )
         )}
-        <Button onClick={handleAddChoice}>Add Choice</Button>
+        {currentPage.elements[0]?.showOtherItem ? (
+          <InputGroup>
+            <Input disabled placeholder="Other"></Input>
+            <InputRightElement width="4.5rem">
+              <IconButton
+                h="1.75rem"
+                size="sm"
+                aria-label="Delete"
+                icon={<VscTrash />}
+                onClick={handleRemoveOtherChoice}
+              ></IconButton>
+            </InputRightElement>
+          </InputGroup>
+        ) : null}
+        <HStack>
+          <Button
+            w={currentPage.elements[0]?.showOtherItem ? '100%' : '70%'}
+            onClick={handleAddChoice}
+          >
+            Add Choice
+          </Button>
+          {!currentPage.elements[0]?.showOtherItem && (
+            <Button w="30%" onClick={handleAddOtherChoice}>
+              Add Other
+            </Button>
+          )}
+        </HStack>
       </Stack>
     </Flex>
   ) : null;

@@ -56,7 +56,7 @@ const pageSchema = Joi.object({
           .messages({
             'array.min': 'You must have at least 2 choices'
           }),
-
+        showOtherItem: Joi.boolean(),
         required: Joi.boolean()
       })
     )
