@@ -15,7 +15,6 @@ import { Product } from 'types';
 import Audiences from '@/components/features/Audiences';
 import AudienceCard from '@/components/flat/AudienceCard';
 import MySurveys from '@/components/features/MySurveys';
-import CardLoader from '@/components/flat/SkeletonLoader/CardLoader';
 import useHeaderStore from '@/components/store/headerStore';
 import { GetStaticPropsResult } from 'next';
 import type { Database } from 'types_db';
@@ -24,55 +23,21 @@ interface Props {
   audiences: Database['public']['Tables']['audiences']['Row'][];
 }
 
-export default function Home({ audiences }: Props) {
+export default function Audience({ audiences }: Props) {
   const supabaseClient = useSupabaseClient();
-  const { user, isLoading } = useUser();
-  const [mySurveys, setMySurveys] = useState<
-    Database['public']['Tables']['surveys']['Row'][]
-  >([]);
+  const user = useSupaUser();
   const title = useHeaderStore((state) => state.title);
   const setTitle = useHeaderStore((state) => state.setTitle);
-
-  async function getMySurveys() {
-    const data = await fetch('/api/get-my-surveys', {
-      method: 'POST',
-      body: JSON.stringify({
-        user_id: user?.id
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    const json = await data.json();
-    setMySurveys(json);
-  }
-
   useEffect(() => {
-    if (user) {
-      setTitle('My Surveys');
-    } else {
-      setTitle('Select Audience');
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      getMySurveys();
-    }
-  }, [user]);
+    setTitle('Select Audience');
+  }, []);
 
   return (
     <Flex w="100%" flexFlow="column">
       <Heading color="gray.600" size="md" mb={10}>
         {title}
       </Heading>
-      {isLoading ? (
-        <CardLoader />
-      ) : user ? (
-        <MySurveys surveys={mySurveys} />
-      ) : (
-        <Audiences audiences={audiences} />
-      )}
+      <Audiences audiences={audiences} />
     </Flex>
   );
 }

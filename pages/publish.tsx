@@ -83,7 +83,7 @@ function PublishSurvey() {
 
   useEffect(() => {
     if (data && !data.audience) {
-      router.push('/');
+      router.push('/audience');
     }
   }, [data]);
 

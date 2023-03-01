@@ -1,14 +1,17 @@
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  Flex
+  Flex,
+  Button
 } from '@chakra-ui/react';
 import useBuilderStore from '@/components/store/builderStore';
 
 export default function Success() {
+  const router = useRouter();
   const reset = useBuilderStore((state) => state.reset);
 
   useEffect(() => {
@@ -17,7 +20,7 @@ export default function Success() {
   }, []);
 
   return (
-    <Flex w="100%" align="center" justify="center" h="100vh" pb="100px">
+    <Flex w="100%" flexFlow="column" align="center" justify="center" h="100vh" pb="100px">
       <Alert
         status="success"
         variant="subtle"
@@ -36,6 +39,14 @@ export default function Success() {
           email when it is published.
         </AlertDescription>
       </Alert>
+      <Button
+        colorScheme="blue"
+        mt={16}
+        size="lg"
+        onClick={() => router.push('/')}
+      >
+        View My Surveys
+      </Button>
     </Flex>
   );
 }

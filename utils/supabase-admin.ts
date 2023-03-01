@@ -186,7 +186,8 @@ const createSurveyRecord = async (
     user: user_id,
     data: survey,
     name: survey.surveyName,
-    responses_needed: survey.responsesNeeded
+    responses_needed: survey.responsesNeeded,
+    status: 'In Review'
   };
   const { data, error } = await supabaseAdmin
     .from('surveys')
@@ -212,6 +213,15 @@ const retrieveAudiences = async () => {
   return data;
 };
 
+const retrieveMySurveys = async (user_id: string) => {
+  const { data, error } = await supabaseAdmin
+    .from('surveys')
+    .select('*')
+    .eq('user', user_id);
+  if (error) throw error;
+  return data;
+};
+
 export {
   upsertProductRecord,
   upsertPriceRecord,
@@ -219,5 +229,6 @@ export {
   manageSubscriptionStatusChange,
   createSurveyRecord,
   getUserProfile,
-  retrieveAudiences
+  retrieveAudiences,
+  retrieveMySurveys
 };
