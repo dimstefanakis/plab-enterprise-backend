@@ -186,13 +186,35 @@ const createSurveyRecord = async (
     user: user_id,
     data: survey,
     name: survey.surveyName,
-    responses_needed: survey.responsesNeeded
+    responses_needed: survey.responsesNeeded,
+    status: 'In Review'
   };
   const { data, error } = await supabaseAdmin
     .from('surveys')
     .insert([surveyData]);
   if (error) throw error;
   console.log(`Survey inserted for user [${user_id}].`);
+  return data;
+};
+
+const editSurveyRecord = async (
+  survey: any,
+  surveyId: string,
+  user: Database['public']['Tables']['users']['Row']
+) => {
+  const user_id = user.id;
+  const surveyData: Database['public']['Tables']['surveys']['Update'] = {
+    data: survey,
+    name: survey.surveyName,
+    responses_needed: survey.responsesNeeded,
+    status: 'In Review'
+  };
+  const { data, error } = await supabaseAdmin
+    .from('surveys')
+    .update(surveyData)
+    .eq('id', surveyId);
+  if (error) throw error;
+  console.log(`Survey updated for user [${user_id}].`);
   return data;
 };
 
@@ -212,12 +234,23 @@ const retrieveAudiences = async () => {
   return data;
 };
 
+const retrieveMySurveys = async (user_id: string) => {
+  const { data, error } = await supabaseAdmin
+    .from('surveys')
+    .select('*')
+    .eq('user', user_id);
+  if (error) throw error;
+  return data;
+};
+
 export {
   upsertProductRecord,
   upsertPriceRecord,
   createOrRetrieveCustomer,
   manageSubscriptionStatusChange,
   createSurveyRecord,
+  editSurveyRecord,
   getUserProfile,
-  retrieveAudiences
+  retrieveAudiences,
+  retrieveMySurveys
 };

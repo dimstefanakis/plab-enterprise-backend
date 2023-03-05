@@ -22,11 +22,53 @@ function PublishSurvey() {
   const data = useBuilderStore((state) => state.data);
   const title = useHeaderStore((state) => state.title);
   const setTitle = useHeaderStore((state) => state.setTitle);
+  const surveyId = useBuilderStore((state) => state.surveyId);
   const user = useUser();
 
   async function publish() {
-    if (!user && !authStatus) {
+    if (surveyId && !user) {
+      toast({
+        title: 'Error Publishing Survey',
+        description: 'You must be signed in to publish a survey.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true
+      });
+      return;
+    }
+    if (!user && !authStatus && !surveyId) {
       router.push('/signin');
+    }
+    if (surveyId) {
+      let response = await fetch('/api/edit-survey', {
+        method: 'POST',
+        body: JSON.stringify({
+          surveyId,
+          survey: data
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      let json = await response.json();
+      if (response.status === 200) {
+        toast({
+          title: 'Survey Updated',
+          description: 'Your survey has been updated.',
+          status: 'success',
+          duration: 5000,
+          isClosable: true
+        });
+      } else {
+        toast({
+          title: 'Error Updating Survey',
+          description: json.message,
+          status: 'error',
+          duration: 5000,
+          isClosable: true
+        });
+      }
+      return;
     }
     const surveyData = JSON.parse(localStorage.getItem('survey') || '{}');
     try {
@@ -83,7 +125,7 @@ function PublishSurvey() {
 
   useEffect(() => {
     if (data && !data.audience) {
-      router.push('/');
+      router.push('/audience');
     }
   }, [data]);
 
@@ -96,7 +138,7 @@ function PublishSurvey() {
         {data.audience && <AudienceCard audience={data.audience} isEditing />}
         <SurveyCard />
         <Button h="100%" colorScheme="blue" w="xs" onClick={publish}>
-          Publish
+          {surveyId ? 'Update Survey' : 'Publish Survey'}
         </Button>
       </HStack>
     </Flex>
