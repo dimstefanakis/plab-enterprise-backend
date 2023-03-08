@@ -7,6 +7,7 @@ function QuestionMap() {
   const data = useBuilderStore((state) => state.data);
   const errors = useBuilderStore((state) => state.errors);
   const currentPageNumber = useBuilderStore((state) => state.currentPage);
+  const isSubmitting = useBuilderStore((state) => state.isSubmitting);
 
   function onClickQuestion(id: string) {
     useBuilderStore.setState({
@@ -38,7 +39,7 @@ function QuestionMap() {
           {data.pages.map((page: any, index: number) => {
             const hasError = Object.keys(errors).includes(page.id);
             let backgroundColor = 'white';
-            backgroundColor = hasError
+            backgroundColor = hasError && isSubmitting
               ? 'red.100'
               : currentPageNumber === index
               ? 'gray.100'

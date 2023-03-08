@@ -12,7 +12,7 @@ export default function BuilderPage() {
   }, []);
 
   return (
-    <Flex ml="100px" flexFlow="column">
+    <Flex ml="310px" flexFlow="column">
       <Heading size="md" color="gray.600" mb={10}>
         {title}
       </Heading>

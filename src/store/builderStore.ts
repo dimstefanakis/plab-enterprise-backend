@@ -20,6 +20,8 @@ interface BuilderState {
   deletePage: (pageId: string) => void;
   reorderPageUp: (pageId: string) => void;
   reorderPageDown: (pageId: string) => void;
+  isSubmitting: boolean;
+  setIsSubmitting: (isSubmitting: boolean) => void;
   reset: () => void;
 }
 
@@ -93,6 +95,8 @@ const useBuilderStore = create<BuilderState>((set) => ({
   data: initialSurveyData,
   surveyId: '',
   errors: {},
+  isSubmitting: false,
+  setIsSubmitting: (isSubmitting: boolean) => set({ isSubmitting }),
   setData: (data: any) =>
     set((state) => {
       const pageErrors = {} as any;

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import {
   Flex,
@@ -19,6 +19,7 @@ import useBuilderStore from '@/components/store/builderStore';
 function Builder() {
   const toast = useToast();
   const router = useRouter();
+  const questionNameRef = useRef<HTMLInputElement>(null);
   const currentPageNumber = useBuilderStore((state) => state.currentPage);
   const currentPage = useBuilderStore(
     (state) => state.data.pages[currentPageNumber]
@@ -27,9 +28,21 @@ function Builder() {
   const data = useBuilderStore((state) => state.data);
   const setData = useBuilderStore((state) => state.setData);
   const errors = useBuilderStore((state) => state.errors);
+  const setIsSubmitting = useBuilderStore((state) => state.setIsSubmitting);
   const pageErrors = errors[currentPage.id];
 
   usePageErrors(currentPage.id);
+
+  useEffect(() => {
+    // reset submitting state when the builder is mounted
+    setIsSubmitting(false);
+  }, []);
+
+  useEffect(() => {
+    if (questionNameRef.current) {
+      questionNameRef.current.focus();
+    }
+  }, [currentPage.id, questionNameRef.current]);
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
@@ -60,6 +73,7 @@ function Builder() {
   // }, [data.pages.length]);
 
   function handleNextClick() {
+    setIsSubmitting(true);
     if (pageErrors && pageErrors.length > 0) {
       if (toast.isActive(`${currentPage.id}-errors`)) {
         toast.update(`${currentPage.id}-errors`, {
@@ -104,6 +118,8 @@ function Builder() {
       <QuestionMap />
       <QuestionNumber />
       <Input
+        ref={questionNameRef}
+        size="lg"
         placeholder="Enter a question"
         value={currentPage.name}
         onChange={handleNameChange}
