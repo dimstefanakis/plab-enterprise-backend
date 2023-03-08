@@ -6,6 +6,8 @@ import type { Database } from 'types_db';
 interface BuilderState {
   data: any;
   errors: any;
+  status: 'draft' | 'published' | 'archived';
+  setStatus: (status: 'draft' | 'published' | 'archived') => void;
   surveyId: string;
   setSurveyId: (surveyId: string) => void;
   setData: (data: any) => void;
@@ -92,6 +94,7 @@ const initialSurveyData = savedData
 const useBuilderStore = create<BuilderState>((set) => ({
   data: initialSurveyData,
   surveyId: '',
+  status: 'draft',
   errors: {},
   setData: (data: any) =>
     set((state) => {
@@ -205,6 +208,7 @@ const useBuilderStore = create<BuilderState>((set) => ({
       };
     }),
   setSurveyId: (surveyId: string) => set({ surveyId }),
+  setStatus: (status: 'draft' | 'published' | 'archived') => set({ status }),
   reset: () =>
     set({
       data: initialSurveyData,

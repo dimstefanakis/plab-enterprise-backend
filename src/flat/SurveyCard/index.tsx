@@ -14,10 +14,12 @@ function SurveyCard({ surveyData, isCreated = false }: SurveyCardProps = {}) {
   const setData = useBuilderStore((state) => state.setData);
   const parsedData = JSON.parse(JSON.stringify(surveyData?.data) || '{}');
   const setSurveyId = useBuilderStore((state) => state.setSurveyId);
+  const setStatus = useBuilderStore((state) => state.setStatus);
 
   function onEdit() {
     if (surveyData) {
       setSurveyId(surveyData.id);
+      setStatus('published');
       setData(surveyData.data);
     }
     router.push('/builder');

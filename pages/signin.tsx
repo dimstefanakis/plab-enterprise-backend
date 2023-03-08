@@ -55,12 +55,10 @@ const SignIn = () => {
         </div>
       </Flex>
     );
-
-  return (
-    <div className="m-6">
-      <LoadingDots />
-    </div>
-  );
+  else {
+    router.replace('/');
+  }
+  return null;
 };
 
 export default SignIn;

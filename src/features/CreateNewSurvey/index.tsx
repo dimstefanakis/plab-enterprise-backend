@@ -5,9 +5,11 @@ import useBuilderStore from '@/components/store/builderStore';
 function CreateNewSurvey() {
   const router = useRouter();
   const reset = useBuilderStore((state) => state.reset);
+  const setStatus = useBuilderStore((state) => state.setStatus);
 
   function handleCreateNewSurvey() {
     reset();
+    setStatus('draft');
     router.push('/builder');
   }
 

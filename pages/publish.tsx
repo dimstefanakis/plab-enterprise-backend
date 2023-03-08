@@ -23,6 +23,7 @@ function PublishSurvey() {
   const title = useHeaderStore((state) => state.title);
   const setTitle = useHeaderStore((state) => state.setTitle);
   const surveyId = useBuilderStore((state) => state.surveyId);
+  const status = useBuilderStore((state) => state.status);
   const user = useUser();
 
   async function publish() {
@@ -39,7 +40,7 @@ function PublishSurvey() {
     if (!user && !authStatus && !surveyId) {
       router.push('/signin');
     }
-    if (surveyId) {
+    if (status === 'published' && surveyId) {
       let response = await fetch('/api/edit-survey', {
         method: 'POST',
         body: JSON.stringify({
@@ -114,7 +115,7 @@ function PublishSurvey() {
   }
 
   useEffect(() => {
-    if (authStatus === 'success') {
+    if (authStatus === 'success' && status == 'draft') {
       publish();
     }
   }, [authStatus, user]);
