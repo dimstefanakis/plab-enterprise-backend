@@ -48,7 +48,9 @@ function SurveyName() {
   }, []);
 
   return (
-    <Flex flexFlow="column" w="100%">
+        <Flex w="100%" justifyContent="center">
+
+    <Flex flexFlow="column" w="100%" maxW="600px" mx={5}>
       <Heading size="md" color="gray.600" mb={10}>
         {title}
       </Heading>
@@ -75,6 +77,7 @@ function SurveyName() {
       <Button mt={10} colorScheme="blue" onClick={onNextClick}>
         Next
       </Button>
+    </Flex>
     </Flex>
   );
 }

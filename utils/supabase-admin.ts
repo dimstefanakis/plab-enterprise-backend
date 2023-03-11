@@ -243,6 +243,23 @@ const retrieveMySurveys = async (user_id: string) => {
   return data;
 };
 
+const createUseCaseRecord = async (id: string, use_case: string) => {
+  const { data, error } = await supabaseAdmin
+    .from('use_cases')
+    .upsert([{ use_case: use_case, id: id }]);
+  if (error) throw error;
+  return data;
+};
+
+const tieUserToUseCase = async (user_id: string, use_case: string) => {
+  const { data, error } = await supabaseAdmin
+    .from('users')
+    .update({ use_case })
+    .eq('id', user_id);
+  if (error) throw error;
+  return data;
+};
+
 export {
   upsertProductRecord,
   upsertPriceRecord,
@@ -252,5 +269,7 @@ export {
   editSurveyRecord,
   getUserProfile,
   retrieveAudiences,
-  retrieveMySurveys
+  retrieveMySurveys,
+  createUseCaseRecord,
+  tieUserToUseCase
 };

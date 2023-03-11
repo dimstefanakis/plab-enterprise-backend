@@ -113,9 +113,25 @@ function PublishSurvey() {
     }
   }
 
+  async function tieUserToUseCase() {
+    let useCase = localStorage.getItem('useCaseId');
+    if (!useCase || !user) return;
+    let response = await fetch('/api/tie-user-to-use-case', {
+      method: 'POST',
+      body: JSON.stringify({
+        use_case: useCase
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    let json = await response.json();
+  }
+
   useEffect(() => {
     if (authStatus === 'success') {
       publish();
+      tieUserToUseCase();
     }
   }, [authStatus, user]);
 
